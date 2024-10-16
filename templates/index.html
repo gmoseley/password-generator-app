@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 400px; margin: auto; text-align: center; }
+        input { width: 60px; text-align: center; }
+        button { padding: 5px 10px; }
+        #result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Secure Password Generator</h1>
+        <form id="passwordForm">
+            <label for="length">Password Length:</label>
+            <input type="number" id="length" name="length" value="64" min="4" max="128">
+            <button type="submit">Generate</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const length = document.getElementById('length').value;
+            
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'length=' + length
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Generated Password: ' + data.password;
+            });
+        });
+    </script>
+</body>
+</html>
